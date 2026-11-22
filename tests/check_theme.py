@@ -9,7 +9,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 THEME = os.path.join(ROOT, "survey/questions/answer/5pointchoice")
 CSS = os.path.join(THEME, "assets/css/smileys.css")
 # The files LimeSurvey accepts in a theme upload (allowedthemeuploads + image formats) that we use
-ALLOWED = {".xml", ".twig", ".css", ".png"}
+ALLOWED = {".xml", ".twig", ".css"}
 failed = False
 
 

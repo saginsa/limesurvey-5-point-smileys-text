@@ -14,7 +14,7 @@
         <authorUrl>https://github.com/saginsa/limesurvey-5-point-smileys-text</authorUrl>
         <supportUrl>https://github.com/saginsa/limesurvey-5-point-smileys-text/issues</supportUrl>
         <license>GNU General Public License version 2 or later</license>
-        <version>2.1.0</version>
+        <version>2.2.0</version>
         <apiVersion>1</apiVersion>
         <lastSecurityUpdate>2.0.0</lastSecurityUpdate>
         <description>5-point choice as five faces, from angry to happy: characters of a small embedded icon font, sized with font-size, the selected face filled with its colour.</description>
@@ -39,7 +39,6 @@
         <js>
         </js>
         <preview>
-            <filename>images/preview.png</filename>
         </preview>
     </files>
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.2.0 — 2026-11-22
+
+- Only the five faces: the "No answer" item of optional questions is no longer shown (it broke the clean row of faces).
+  An unanswered question is stored empty, as before; a chosen face can be changed but not cleared.
+- Lighter zip: only the theme (12 KB: config, two templates, the stylesheet with the font) and the two licenses;
+  README and CHANGELOG stay on GitHub, the preview picture is gone (LimeSurvey shows its default one).
+- README: the faces as a picture made with the theme's font (GitHub showed the characters with the reader's emoji font).
+
 ## 2.1.0 — 2026-11-22
 
 Back to the look of 1.0: the faces are characters again, sized with `font-size` and coloured with `color`.

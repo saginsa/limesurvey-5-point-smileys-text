@@ -201,12 +201,12 @@ check(qtype == "5" and extends == "5", "theme for question type 5 (5 point choic
 check(visible == "Y", "theme visible in the question type selector", visible)
 check(author == "saginsa", "author from config.xml", author)
 files = web_sh("cd %s && find . -type f | sort" % THEME_DIR).split()
+check(len(files) == 6, "only the theme files and the two licenses are installed", files)
 for f in ["./survey/questions/answer/5pointchoice/config.xml",
           "./survey/questions/answer/5pointchoice/answer.twig",
           "./survey/questions/answer/5pointchoice/rows/item_row.twig",
           "./survey/questions/answer/5pointchoice/assets/css/smileys.css",
-          "./survey/questions/answer/5pointchoice/assets/images/preview.png",
-          "./README.md", "./LICENSE.txt", "./LICENSE-fonts.txt"]:
+          "./LICENSE.txt", "./LICENSE-fonts.txt"]:
     check(f in files, "installed " + f, files)
 
 step("Survey with two 5 point choice questions on the theme")
@@ -215,7 +215,7 @@ sql("DELETE FROM lime_settings_global WHERE stg_name = 'RPCInterface';\n"
 key = rpc("get_session_key", ADMIN, PASSWORD)
 sid = int(rpc("add_survey", key, 0, "Smileys test", "en", "A"))
 gid = int(rpc("add_group", key, sid, "Group 1", ""))
-# Q1 optional (gets "No answer"), Q2 mandatory; Q3 a core 5 point choice for comparison
+# Q1 optional, Q2 mandatory; Q3 a core 5 point choice for comparison (it keeps "No answer")
 for order, (title, mandatory, theme) in enumerate([("Q1", "N", THEME), ("Q2", "Y", THEME), ("Q3", "N", "5pointchoice")]):
     sql("INSERT INTO lime_questions (sid, gid, type, title, mandatory, question_order, question_theme_name, "
         "relevance, encrypted) VALUES (%d, %d, '5', '%s', '%s', %d, '%s', '1', 'N');\n"
@@ -252,10 +252,15 @@ q1 = [n for n in radios if n.endswith(str(qids["Q1"]))]
 q2 = [n for n in radios if n.endswith(str(qids["Q2"]))]
 check(len(q1) == 1 and len(q2) == 1, "radio groups of Q1 and Q2", list(radios))
 q1, q2 = q1[0], q2[0]
-check([r["value"] for r in radios[q1]] == ["1", "2", "3", "4", "5", ""], "Q1: five faces and \"No answer\"",
+q3 = [n for n in radios if n.endswith(str(qids["Q3"]))]
+check(q3 and [r["value"] for r in radios[q3[0]]][-1] == "", "core question Q3 (optional) has \"No answer\"",
+      q3 and [r["value"] for r in radios[q3[0]]])
+check([r["value"] for r in radios[q1]] == ["1", "2", "3", "4", "5"], "Q1 (optional): only the five faces, no \"No answer\"",
       [r["value"] for r in radios[q1]])
-check([r["value"] for r in radios[q2]] == ["1", "2", "3", "4", "5"], "Q2 (mandatory): five faces, no \"No answer\"",
+check([r["value"] for r in radios[q2]] == ["1", "2", "3", "4", "5"], "Q2 (mandatory): only the five faces",
       [r["value"] for r in radios[q2]])
+lists = re.findall(r'<ul[^>]*smiley-list[^>]*>(.*?)</ul>', page_html, re.S)
+check(len(lists) == 2 and not any("noanswer-item" in l for l in lists), "no \"No answer\" item in the themed lists")
 q1_items = [i for i in page.items if i["id"].startswith("javatbd" + q1 + "_C")]
 for n in range(1, 6):
     cls = q1_items[n - 1]["class"].split()
@@ -263,11 +268,7 @@ for n in range(1, 6):
           "face %d has its classes" % n, cls)
     check(page.labels.get("answer%s%d" % (q1, n), "").strip() == str(n), "face %d label text for screen readers" % n,
           page.labels.get("answer%s%d" % (q1, n)))
-noanswer = q1_items[5]["class"].split()
-check("noanswer-item" in noanswer and "smiley-face" not in noanswer, "\"No answer\" is not drawn as a face", noanswer)
-check(page.labels.get("answer" + q1, "").strip() == "No answer", "\"No answer\" keeps its visible text",
-      page.labels.get("answer" + q1))
-check(not any("checked" in r for r in radios[q1][:5] + radios[q2]), "nothing preselected")
+check(not any("checked" in r for r in radios[q1] + radios[q2]), "nothing preselected")
 java = [i for i in page.inputs if i.get("id") == "java" + q1]
 check(java and java[0].get("value") == "" and "disabled" in java[0], "hidden java<SGQA> input quoted and empty", java)
 

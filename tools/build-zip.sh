@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Builds dist/5-Point-Smileys-Text-<version>.zip for "Upload & install" of question themes in LimeSurvey.
-# The zip root holds survey/… (the theme) plus README, CHANGELOG and the licenses, as the theme folder on the server.
+# The zip root holds survey/… (the theme) and the two licenses, as the theme folder on the server;
+# README and CHANGELOG stay on GitHub.
 # LimeSurvey skips files with other extensions than its allowed theme uploads, so only those go in.
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -10,7 +11,7 @@ version=$(sed -n 's:.*<version>\([0-9][0-9.]*\)</version>.*:\1:p' "$config" | he
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 mkdir -p "$tmp/$name" dist
-cp -R survey README.md CHANGELOG.md LICENSE.txt LICENSE-fonts.txt "$tmp/$name/"
+cp -R survey LICENSE.txt LICENSE-fonts.txt "$tmp/$name/"
 find "$tmp/$name" -name '.DS_Store' -delete
 rm -f "dist/$name-$version.zip"
 (cd "$tmp/$name" && COPYFILE_DISABLE=1 zip -qrX "$OLDPWD/dist/$name-$version.zip" .)

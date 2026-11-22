@@ -144,9 +144,3 @@
     clip-path: inset(50%);
     white-space: nowrap;
 }
-
-/* "No answer" (questions that are not mandatory): an ordinary radio button on its own line */
-.smiley-list .noanswer-item {
-    flex-basis: 100%;
-    text-align: center;
-}

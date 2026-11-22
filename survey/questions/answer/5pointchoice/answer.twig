@@ -12,7 +12,10 @@
 <!-- 5 point smileys text -->
 <ul class="{{ coreClass }} list-unstyled smiley-list" role="radiogroup" aria-labelledby="ls-question-text-{{ name }}">
     {% for aRow in aRows %}
-        {% include './survey/questions/answer/5pointchoice/rows/item_row.twig' with aRow only %}
+        {# Only the five faces: the "No answer" row of optional questions (empty value) is not shown #}
+        {% if aRow.value != '' %}
+            {% include './survey/questions/answer/5pointchoice/rows/item_row.twig' with aRow only %}
+        {% endif %}
     {% endfor %}
 </ul>
 

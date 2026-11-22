@@ -1,14 +1,18 @@
 # 5 Point Smileys Text — LimeSurvey question theme
 
 A question theme for the **5 point choice** question type: the answers are five faces, from angry to happy.
-The faces are Unicode characters (😠 ☹ 😐 ☺ 😀) drawn by a tiny font embedded in the stylesheet (2 × 1.3 KB),
-so they are sized with `font-size`, coloured with `color` and look the same in every browser and on every phone.
+The faces are Unicode characters (U+1F620, U+2639, U+1F610, U+263A, U+1F600) drawn by a tiny font embedded
+in the stylesheet (2 × 1.3 KB), so they are sized with `font-size`, coloured with `color` and look the same
+in every browser and on every phone:
+
+<img src="docs/faces.png" width="248" alt="Five outline faces from angry to happy, and below them the same faces filled in red, orange, blue, green and green">
 
 ![Two questions with the theme: one answered with the 4th face, one with the 1st](docs/screenshot.png)
 
 - Five outline faces in the text colour of the survey theme; the selected one becomes a filled face in its colour
   (red, orange, blue, green, green by default).
-- "No answer" for optional questions stays a normal radio button under the faces.
+- Just the five faces: no "No answer" item, also for optional questions (an unanswered question is stored empty,
+  as usual).
 - Real radio buttons underneath: keyboard (Tab, arrow keys; a thin line marks the keyboard focus) and screen
   readers ("1"…"5"). No focus outline after a click.
 - Responses are stored as usual (1–5), conditions and expressions work as with the core question.
@@ -58,7 +62,7 @@ five glyphs from the regular (outline) and solid (filled) styles, mapped to U+1F
 
 The look and the characters are the same as in 1.0, but the embedded font is now an openly licensed one, and
 a few problems are fixed (see [CHANGELOG](CHANGELOG.md)): the theme no longer changes radio buttons of other
-questions on the page, shows "No answer", works with the keyboard and screen readers. The theme name is the same,
+questions on the page, works with the keyboard and screen readers. The theme name is the same,
 so uploading the new zip updates the questions that already use it.
 
 ## Development
