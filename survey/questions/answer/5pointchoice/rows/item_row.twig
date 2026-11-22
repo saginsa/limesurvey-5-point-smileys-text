@@ -1,0 +1,23 @@
+{#
+/**
+ * 5 Point Smileys Text: one answer (based on the core 5pointchoice/rows/item_row.twig)
+ *
+ * @var name            SGQA of the question
+ * @var value           1-5, or empty for "No answer"
+ * @var id              id of the radio input
+ * @var labelText       1-5, or "No answer" in the survey language
+ * @var itemExtraClass  "noanswer-item" for "No answer"
+ * @var checkedState    " CHECKED " when this answer is selected
+ */
+#}
+
+<li id="javatbd{{ name }}_C{{ value }}" class="answer-item radio-item {{ itemExtraClass }} smiley-item{% if value != '' %} smiley-face smiley-item-{{ value }}{% endif %}">
+    <input
+        type="radio"
+        name="{{ name }}"
+        id="answer{{ id }}"
+        value="{{ value }}"
+        {{ checkedState }}
+    />
+    <label for="answer{{ id }}" class="control-label radio-label"><span class="smiley-label-text">{{ labelText }}</span></label>
+</li>

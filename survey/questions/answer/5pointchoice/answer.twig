@@ -1,0 +1,20 @@
+{#
+/**
+ * 5 Point Smileys Text: answers wrapper (based on the core 5pointchoice/answer.twig)
+ *
+ * @var coreClass     classes of the core question
+ * @var name          SGQA of the question
+ * @var sessionValue  current answer, 1-5 or empty
+ * @var aRows         rows for rows/item_row.twig
+ */
+#}
+
+<!-- 5 point smileys text -->
+<ul class="{{ coreClass }} list-unstyled smiley-list" role="radiogroup" aria-labelledby="ls-question-text-{{ name }}">
+    {% for aRow in aRows %}
+        {% include './survey/questions/answer/5pointchoice/rows/item_row.twig' with aRow only %}
+    {% endfor %}
+</ul>
+
+{# Value for the expression manager javascript (by id), not submitted #}
+<input type="hidden" name="java{{ name }}" id="java{{ name }}" disabled value="{{ sessionValue }}" />

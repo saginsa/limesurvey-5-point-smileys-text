@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    5 Point Smileys Text: question theme for the "5 point choice" question type.
+    Five faces drawn with CSS (inline SVG), no images or web fonts to download.
+-->
+<config>
+    <metadata>
+        <name>5-Point-Smileys-Text</name>
+        <type>question_theme</type>
+        <title>5 Point Smileys Text</title>
+        <creationDate>11/12/2022</creationDate>
+        <lastUpdate>22/11/2026</lastUpdate>
+        <author>saginsa</author>
+        <authorUrl>https://github.com/saginsa/limesurvey-5-point-smileys-text</authorUrl>
+        <supportUrl>https://github.com/saginsa/limesurvey-5-point-smileys-text/issues</supportUrl>
+        <license>GNU General Public License version 2 or later</license>
+        <version>2.0.0</version>
+        <apiVersion>1</apiVersion>
+        <lastSecurityUpdate>2.0.0</lastSecurityUpdate>
+        <description>5-point choice as five faces, from angry to happy. Vector icons in the stylesheet: no images or web fonts, colours set by CSS variables.</description>
+        <questionType>5</questionType>
+        <group>Single choice questions</group>
+        <subquestions>0</subquestions>
+        <answerscales>0</answerscales>
+        <hasdefaultvalues>0</hasdefaultvalues>
+        <assessable>0</assessable>
+        <class>choice-5-pt-radio</class>
+    </metadata>
+
+    <compatibility>
+        <version>6.0</version>
+        <version>7.0</version>
+    </compatibility>
+
+    <files>
+        <css>
+            <filename>css/smileys.css</filename>
+        </css>
+        <js>
+        </js>
+        <preview>
+            <filename>images/preview.png</filename>
+        </preview>
+    </files>
+
+    <attributes>
+        <!-- The faces replace the star and slider layouts of the core question: hide the setting -->
+        <attribute>
+            <name>slider_rating</name>
+            <category>Display</category>
+            <sortorder>1000</sortorder>
+            <inputtype></inputtype>
+            <default>0</default>
+            <help>This setting is not available in this question theme.</help>
+            <caption>Use slider layout (not available in this theme)</caption>
+            <readonly_when_active>false</readonly_when_active>
+        </attribute>
+    </attributes>
+
+    <engine>
+        <load_core_css>true</load_core_css>
+        <load_core_js>true</load_core_js>
+        <show_as_template>true</show_as_template>
+        <show_as_question_type>true</show_as_question_type>
+    </engine>
+</config>
