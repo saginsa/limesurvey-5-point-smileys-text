@@ -52,7 +52,7 @@ def sh(args, stdin=None):
 
 def sql(query):
     """Runs SQL in the test database, returns rows as lists of strings (NULL -> None)."""
-    out = sh(COMPOSE + ["exec", "-T", "db", "mysql", "-ulimesurvey", "-plimesurvey", "-N", "-B", "limesurvey"],
+    out = sh(COMPOSE + ["exec", "-T", "db", "mysql", "--default-character-set=utf8mb4", "-ulimesurvey", "-plimesurvey", "-N", "-B", "limesurvey"],
              stdin=query)
     return [[None if v == "NULL" else v for v in line.split("\t")] for line in out.splitlines()]
 
