@@ -206,7 +206,7 @@ for f in ["./survey/questions/answer/5pointchoice/config.xml",
           "./survey/questions/answer/5pointchoice/rows/item_row.twig",
           "./survey/questions/answer/5pointchoice/assets/css/smileys.css",
           "./survey/questions/answer/5pointchoice/assets/images/preview.png",
-          "./README.md", "./LICENSE.txt"]:
+          "./README.md", "./LICENSE.txt", "./LICENSE-fonts.txt"]:
     check(f in files, "installed " + f, files)
 
 step("Survey with two 5 point choice questions on the theme")
@@ -276,11 +276,11 @@ css_urls = [u for u in page.css if "smileys.css" in u]
 check(len(css_urls) == 1, "smileys.css linked once", page.css)
 status, _, css = http(urllib.parse.urljoin(ROOT_URL + "/", css_urls[0]))
 check(status == 200, "smileys.css answered 200", status)
-check("--smiley-icon-5-selected" in css and "mask" in css, "icons and masks in the served stylesheet")
+check(css.count('font-family: "Smileys Faces"') >= 2 and "data:font/woff2;base64," in css,
+      "embedded font in the served stylesheet")
 outside_data = re.sub(r'url\("data:[^"]*"\)', "", css)
-check("url(" not in outside_data, "no url() besides inline data: icons (no requests to other sites)",
+check("url(" not in outside_data, "no url() besides the inline font (no requests to other sites)",
       re.findall(r"url\([^)]*\)", outside_data))
-check("@font-face" not in css, "no web fonts")
 
 step("Mandatory question: submitting without an answer stays on the page")
 status, _, body = submit(page_html, {q1: "4"})

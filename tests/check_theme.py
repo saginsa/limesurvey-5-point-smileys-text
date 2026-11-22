@@ -61,16 +61,18 @@ for name in ("answer.twig", "rows/item_row.twig"):
 # ---- CSS
 css = open(CSS, encoding="utf-8").read()
 plain = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
-plain_no_data = re.sub(r'url\("data:[^"]*"\)', "url()", plain)
+fonts = re.findall(r"@font-face\s*\{[^}]*\}", plain)
+rules = re.sub(r"@font-face\s*\{[^}]*\}", "", plain)
+plain_no_data = re.sub(r'url\("data:[^"]*"\)', "url()", rules)
 result(plain.count("{") == plain.count("}"), "smileys.css: balanced braces")
-result("@import" not in plain and "@font-face" not in plain, "smileys.css: no @import, no web fonts")
+result("@import" not in plain, "smileys.css: no @import")
 external = re.findall(r"url\((?!\))[^)]*\)", plain_no_data)
-result(not external, "smileys.css: no url() besides inline data: icons", external)
+result(not external, "smileys.css: no url() in the rules", external)
 result("!important" not in plain, "smileys.css: no !important (survey themes can override)")
 
 # Every selector must be inside .smiley-list, so the theme does not change other questions on the page
 selectors = []
-for block in re.finditer(r"([^{}]+)\{", re.sub(r"@media[^{]*\{", "", plain_no_data)):
+for block in re.finditer(r"([^{}]+)\{", plain_no_data):
     for sel in block.group(1).split(","):
         sel = sel.strip()
         if sel:
@@ -78,16 +80,29 @@ for block in re.finditer(r"([^{}]+)\{", re.sub(r"@media[^{]*\{", "", plain_no_da
 unscoped = [s for s in selectors if not s.startswith(".smiley-list")]
 result(selectors and not unscoped, "smileys.css: %d selectors, all start with .smiley-list" % len(selectors), unscoped)
 
-# The icons in the CSS are well-formed SVG
-icons = re.findall(r'url\("data:image/svg\+xml,([^"]*)"\)', css)
-result(len(icons) == 10, "smileys.css: 10 inline icons", len(icons))
-import urllib.parse  # noqa: E402
-broken = []
-for i, data in enumerate(icons):
-    try:
-        ET.fromstring(urllib.parse.unquote(data))
-    except ET.ParseError as e:
-        broken.append((i, str(e)))
-result(not broken, "smileys.css: inline icons parse as XML", broken)
+# The embedded font: two faces of "Smileys Faces", inline woff2 only, the five characters the rules use
+result(len(fonts) == 2, "smileys.css: two @font-face rules", len(fonts))
+weights = sorted(re.search(r"font-weight:\s*(\d+)", f).group(1) for f in fonts) if fonts else []
+result(weights == ["400", "900"], "smileys.css: weights 400 (outline) and 900 (filled)", weights)
+for f in fonts:
+    srcs = re.findall(r"url\(([^)]*)\)", f)
+    result('font-family: "Smileys Faces"' in f and len(srcs) == 1 and srcs[0].startswith('"data:font/woff2;base64,'),
+           "smileys.css: @font-face is \"Smileys Faces\" with an inline woff2", f[:120])
+chars = sorted(int(c, 16) for c in re.findall(r'--smiley-char:\s*"\\([0-9A-Fa-f]+)"', css))
+result(chars == sorted([0x1F620, 0x2639, 0x1F610, 0x263A, 0x1F600]), "smileys.css: five face characters", [hex(c) for c in chars])
+try:
+    import base64, io  # noqa: E401
+    from fontTools.ttLib import TTFont
+except ImportError:
+    print("skip  font contents (pip install fonttools brotli)")
+else:
+    for f in fonts:
+        data = base64.b64decode(re.search(r"base64,([^\"]+)", f).group(1))
+        font = TTFont(io.BytesIO(data))
+        cmap = set(font.getBestCmap())
+        result(cmap == set(chars), "font %s: maps exactly the five characters" % font["name"].getDebugName(4),
+               sorted(hex(c) for c in cmap))
+        result("Font Awesome" not in " ".join(str(n) for n in font["name"].names if n.nameID in (1, 4, 6, 16)),
+               "font %s: renamed (Reserved Font Name of the OFL)" % font["name"].getDebugName(4))
 
 sys.exit(1 if failed else 0)

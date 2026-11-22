@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install codespell
-        run: sudo apt-get update && sudo apt-get install -y codespell
+      - name: Install codespell, fonttools
+        run: sudo apt-get update && sudo apt-get install -y codespell && pip install fonttools brotli
       - name: Static checks
         run: tests/static.sh
   integration:

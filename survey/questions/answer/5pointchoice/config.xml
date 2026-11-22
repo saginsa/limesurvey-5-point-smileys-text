@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
     5 Point Smileys Text: question theme for the "5 point choice" question type.
-    Five faces drawn with CSS (inline SVG), no images or web fonts to download.
+    Five faces as characters of a small font embedded in the stylesheet.
 -->
 <config>
     <metadata>
@@ -14,10 +14,10 @@
         <authorUrl>https://github.com/saginsa/limesurvey-5-point-smileys-text</authorUrl>
         <supportUrl>https://github.com/saginsa/limesurvey-5-point-smileys-text/issues</supportUrl>
         <license>GNU General Public License version 2 or later</license>
-        <version>2.0.0</version>
+        <version>2.1.0</version>
         <apiVersion>1</apiVersion>
         <lastSecurityUpdate>2.0.0</lastSecurityUpdate>
-        <description>5-point choice as five faces, from angry to happy. Vector icons in the stylesheet: no images or web fonts, colours set by CSS variables.</description>
+        <description>5-point choice as five faces, from angry to happy: characters of a small embedded icon font, sized with font-size, the selected face filled with its colour.</description>
         <questionType>5</questionType>
         <group>Single choice questions</group>
         <subquestions>0</subquestions>
